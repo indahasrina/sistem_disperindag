@@ -1,0 +1,76 @@
+<?php
+error_reporting(0);
+//include class
+date_default_timezone_set("Asia/Jakarta");
+session_start();
+//include class
+include "../../../class/class.connecting.php";
+include "../../../class/class.user.php";
+include "../../../class/class.pegawai.php";
+include "../../../class/class.pemohon.php";
+include "../../../class/class.koperasi.php";
+
+//include library
+include "../../../library/notification/notification-javascript.php";
+include "../../../library/url.php";
+include "../../../library/format-tanggal.php";
+//set variabel
+$classuser		= new user;
+$classpegawai	= new pegawai;
+$classpemohon	= new pemohon;
+$classkoperasi	= new koperasi;
+?>
+<!DOCTYPE html>
+<!--[if IE 8]> <html lang="en" class="ie8"> <![endif]-->
+<!--[if IE 9]> <html lang="en" class="ie9"> <![endif]-->
+<!--[if !IE]><!-->
+<html lang="en">
+    <!--<![endif]-->
+    <head>
+        <!-- Title -->
+        <title>Dinas Perindustrian Perdagangan dan Koperasi</title>
+        <!-- Meta -->
+        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+        <!-- Bootstrap Core CSS -->
+        <link rel="stylesheet" href="../../assets/css/bootstrap.css" rel="stylesheet">
+    </head>
+    <body onload="window.print()">
+    <center>
+    <h2>Laporan Data Perizinan Koperasi</h2>
+    <h3>Dinas Perindustrian Perdagangan dan Koperasi</h3>
+    <h3>Lubuk Sikaping</h3>
+    <hr />
+    </center>
+    <p>Tanggal <?php echo formatTanggal($_POST['dari']) ?> - <?php echo formatTanggal($_POST['sampai']) ?></p>
+    <table class="table table-bordered">
+    	<tr>
+    		<td>No</td>
+    		<td>Tanggal Permohonan</td>
+    		<td>Nama Pemohon</td>
+    		<td>Nomor Koperasi</td>
+    		<td>Nama Koperasi</td>
+            <td>Jenis Koperasi</td>
+            <td>Kedudukan Koperasi</td>
+    		<td>Status</td>
+    	</tr>
+        <?php echo $classkoperasi->laporankoperasi($_POST['tipe'], $_POST['dari'], $_POST['sampai']) ?>
+    </table>
+    <br/>
+      <table align="right">
+        <tr>
+    		<td>Tanggal <?php echo formatTanggal(date('Y-m-d')) ?></td>
+    	</tr>
+    	<tr>
+    		<td>Diketahui</td>
+    	</tr>
+        <tr>
+    		<td><br/> <br/></td>
+    	</tr>
+        <tr>
+    		<td><?php echo $classpegawai->getpegawai('nama_lengkap', $_SESSION['idperizinan']) ?></td>
+    	</tr>
+      </table>
+    </table>
+	</body>
+</html>
