@@ -1,0 +1,30 @@
+<div id="icons" class="bottom-border-shadow">
+	<div class="container background-white bottom-border">
+		<br /><br />        
+        <div class="col-md-3"></div>
+		<center>
+        <div class="col-md-6">
+		<h3>Laporan Koperasi</h3>
+		<hr />
+		<form method="post" action="modul/laporan/print-laporan-koperasi.php" target="_blank">
+        	<div class="form-group">
+           	  <label>Status</label>
+                <select name="tipe" class="form-control">
+                	<option>semua</option>
+                    <option>proses</option>
+                    <option>disetujui</option>
+                    <option>ditolak</option>
+				</select>
+            </div>
+            <label>Tanggal Permohonan</label><br/>
+			<input name="dari" type="date"> - <input name="sampai" type="date">			
+			<br /><br />
+			<input type="submit" name="print" class="btn btn-default" value="print" />
+		</form>
+        </div>
+		</center>        
+        <div class="col-md-3"></div>
+        <div class="row"></div>
+		<br />
+	</div>
+</div>
