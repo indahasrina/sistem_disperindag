@@ -1,0 +1,140 @@
+<?php 
+/* authenfikasi login user */
+if(!$_SESSION['idperizinan']){
+	echo Gagal_akses();
+	echo redirect('login','login');
+}else{
+?>
+<?php
+$id_user	= $_GET['id_user'];
+if(isset($_POST['simpan'])){
+	$password		= md5($_POST['password']);
+	$hak_akses		= $_POST['hak_akses'];
+	$status			= $_POST['status'];
+	$email			= $_POST['email'];
+	$nip 			= $classpegawai->getpegawai('nip', $id_user);
+	$nama_lengkap	= $_POST['nama_lengkap'];
+	$golongan		= $_POST['golongan'];
+	$jabatan		= $_POST['jabatan'];
+	$tempat_lahir	= $_POST['tempat_lahir'];
+	$tgl_lahir		= $_POST['tgl_lahir'];
+	$alamat			= $_POST['alamat'];
+	$telepon		= $_POST['telepon'];
+	$jenis_kelamin	= $_POST['jenis_kelamin'];
+	//cek apakah password kosong
+	if($password == ""){
+		$input	= $classuser->euser($id_user, $hak_akses, $status, $email);
+		if($input){
+			$inputpegawai	= $classpegawai->epegawai($nip, $nama_lengkap, $golongan, $jabatan, $tempat_lahir, $tgl_lahir, $alamat, $telepon, $jenis_kelamin);
+			$_SESSION['alertinput']	= '<div class="alert alert-success"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>Data berhasil dirubah</div>';
+			$_SESSION['timeralert']	= time();
+			echo redirect('user', 'data-pegawai');
+		}else{
+			$_SESSION['alertinput']	= '<div class="alert alert-danger"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>Terjadi Kesalahan. Mohon periksa kembali.</div>';
+			$_SESSION['timeralert']	= time();
+			echo '<script>history.back()</script>';
+		}
+	}else{
+		$input			= $classuser->euser($id_user, $hak_akses, $status, $email);
+		$gantipassword	= $classuser->epassword($id_user,$password);
+		if($input){
+			$inputpegawai	= $classpegawai->epegawai($nip, $nama_lengkap, $golongan, $jabatan, $tempat_lahir, $tgl_lahir, $alamat, $telepon, $jenis_kelamin);
+			$_SESSION['alertinput']	= '<div class="alert alert-success"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>Data berhasil dirubah</div>';
+			$_SESSION['timeralert']	= time();
+			echo redirect('user', 'data-pegawai');
+		}else{
+			$_SESSION['alertinput']	= '<div class="alert alert-danger"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>Terjadi Kesalahan. Mohon periksa kembali.</div>';
+			$_SESSION['timeralert']	= time();
+			echo '<script>history.back()</script>';
+		}
+	}
+}
+?>
+<div id="icons" class="bottom-border-shadow">
+	<div class="container background-white bottom-border">
+		<form method="post">
+        <h3 class="page-header">Data Pegawai</h3>          
+        <?php echo $_SESSION['alertinput']; ?>      
+        	<div class="form-group">
+                <label>NIP *</label>
+                <input type="text" name="nip" class="form-control" maxlength="25" required="required" value="<?php echo $classpegawai->getpegawai("nip", $id_user) ?>" disabled="disabled" />
+            </div>
+            <div class="form-group">
+                <label>Nama Lengkap *</label>
+                <input type="text" name="nama_lengkap" class="form-control" maxlength="50" required="required" value="<?php echo $classpegawai->getpegawai("nama_lengkap", $id_user) ?>" />
+            </div>	
+            <div class="form-group">
+                <label>Golongan * (<?php echo $classpegawai->getpegawai("golongan", $id_user) ?>)</label>
+                <select name="golongan" class="form-control">
+                	<option value="<?php echo $classpegawai->getpegawai("golongan", $id_user) ?>">Silahkan Pilih Golongan</option>
+                	<option>A</option>
+                    <option>B</option>
+                    <option>C</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Jabatan *</label>
+                <input type="text" name="jabatan" class="form-control" maxlength="50" value="<?php echo $classpegawai->getpegawai("jabatan", $id_user) ?>" required="required" />
+            </div>	
+            <div class="form-group">
+                <label>Tempat Lahir *</label>
+                <input type="text" name="tempat_lahir" class="form-control" maxlength="50" value="<?php echo $classpegawai->getpegawai("tempat_lahir", $id_user) ?>" required="required" />
+            </div>	
+            <div class="form-group">
+                <label>Tanggal lahir *</label>
+                <input type="date" name="tgl_lahir" class="form-control" value="<?php echo $classpegawai->getpegawai("tgl_lahir", $id_user) ?>" required="required" />
+            </div>	
+            <div class="form-group">
+                <label>Alamat *</label>
+                <input type="text" name="alamat" class="form-control" maxlength="100" value="<?php echo $classpegawai->getpegawai("alamat", $id_user) ?>" required="required" />
+            </div>	
+            <div class="form-group">
+                <label>Telepon *</label>
+                <input type="text" name="telepon" class="form-control" maxlength="50" value="<?php echo $classpegawai->getpegawai("telepon", $id_user) ?>" required="required" />
+            </div>
+            <div class="form-group">
+                <label>Jenis Kelamin * (<?php echo $classpegawai->getpegawai("jenis_kelamin", $id_user) ?>)</label>
+                <select name="jenis_kelamin" class="form-control">
+                	<option value="<?php echo $classpegawai->getpegawai("jenis_kelamin", $id_user) ?>">Pilih Jenis Kelamin</option>
+                	<option>Laki - Laki</option>
+                    <option>Perempuan</option>
+                </select>
+            </div>		
+            <div class="form-group">
+                <label>Email *</label>
+                <input type="email" name="email" class="form-control" maxlength="100" value="<?php echo $classuser->getuser("email", $id_user) ?>" required="required" />
+            </div>
+            <div class="form-group">
+                <label>Username *</label>
+                <input type="text" name="username" class="form-control" maxlength="32" value="<?php echo $classuser->getuser("username", $id_user) ?>" required="required" />
+            </div>
+            <div class="form-group">
+                <label>Password *</label>
+                <input type="password" name="password" class="form-control" maxlength="32" placeholder="Kosongkan jika tidak dirubah" />
+            </div>
+            <div class="form-group">
+                <label>Hak Akses (<?php echo $classuser->getuser("hak_akses", $id_user) ?>)</label>
+                <select name="hak_akses" class="form-control">
+                    <option value="<?php echo $classuser->getuser("hak_akses", $id_user) ?>">Silahkan Pilih Hak Akses</option>
+                    <option value="admin">admin</option>
+                    <option value="kepala dinas">kepala dinas</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Status (<?php echo $classuser->getuser("status", $id_user) ?>)</label>
+                <select name="status" class="form-control">
+                    <option value="<?php echo $classuser->getuser("status", $id_user) ?>">Silahkan Status</option>
+                    <option>aktif</option>
+                    <option>non aktif</option>
+                </select>
+            </div>
+        <div class="col-md-6">
+        </div>
+        <div class="row"></div>
+		<a href="index.php?modul=user&&file=data-pegawai" class="btn btn-primary">Kembali</a> | <input type="submit" name="simpan" value="Simpan" class="btn btn-primary">
+		</form>
+		<br /><br /><br /><br />
+	</div>
+</div>
+
+<?php }?>
