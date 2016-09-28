@@ -1,0 +1,60 @@
+<?php 
+/* authenfikasi login user */
+if(!$_SESSION['idperizinan']){
+	echo Gagal_akses();
+	echo redirect('login','login');
+}else{
+?>
+<?php
+$id_koperasi = $_GET['id_koperasi'];
+if(isset($_POST['simpan'])){
+		$status				= $_POST['status']; 
+		$keterangan			= $_POST['keterangan']; 
+		$tgl_dikeluarkan	= $_POST['tgl_dikeluarkan']; 
+		$input	= $classkoperasi->proseskoperasi($id_koperasi, $tgl_dikeluarkan, $status, $keterangan);
+		if($input){
+			$_SESSION['alertinput']	= '<div class="alert alert-success"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>Koperasi '.$classkoperasi->getkoperasi('nama_koperasi', $id_koperasi).' berhasil diproses</div>';
+			$_SESSION['timeralert']	= time();
+			echo redirect('perizinan', 'data-koperasi');
+		}else{
+			$_SESSION['alertinput']	= '<div class="alert alert-danger"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>Terjadi Kesalahan. Mohon periksa kembali.</div>';
+			$_SESSION['timeralert']	= time();
+			echo '<script>history.back()</script>';
+		}
+}
+?>
+<div id="icons" class="bottom-border-shadow">
+	<div class="container background-white bottom-border">
+		<form method="post">
+        <h3 class="page-header">Proses Data Permohonan Koperasi</h3>          
+        <?php echo $_SESSION['alertinput']; ?>        		   
+            <div class="form-group">
+                <label>Nomor - Nama Koperasi</label>
+                <input type="text" name="nama_koperasi" class="form-control" maxlength="30" value="<?php echo $classkoperasi->getkoperasi('nomor_koperasi', $id_koperasi) ?> - <?php echo $classkoperasi->getkoperasi('nama_koperasi', $id_koperasi) ?>" disabled />
+            </div>
+            <div class="form-group">
+                <label>Status*</label>
+                <select name="status" class="form-control" id="select">
+                	<option>disetujui</option>
+                    <option>ditolak</option>
+                </select>
+            </div>	
+            <div class="form-group">
+                <label>Keterangan</label>
+                <input type="text" name="keterangan" class="form-control" maxlength="100" />
+            <div class="form-group">
+                <label>Tanggal Dikeluarkan *</label>
+                <input type="date" name="tgl_dikeluarkan" class="form-control" min="<?php echo date('Y-m-d') ?>" required="required" />
+            </div>
+            </div>
+        <div class="col-md-6">
+        </div>
+        <div class="row"></div>
+		<a href="index.php?modul=perizinan&&file=data-siup" class="btn btn-default">Kembali</a> | <input type="submit" name="simpan" value="Simpan" class="btn btn-primary">
+		</form>
+		<br /><br /><br /><br />
+	</div>
+</div>
+
+<?php }?>
+
