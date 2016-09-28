@@ -1,0 +1,239 @@
+<?php 
+/* authenfikasi login user */
+if(!$_SESSION['idperizinan']){
+	echo Gagal_akses();
+	echo redirect('login','login');
+}else{
+?>
+<?php
+$id_koperasi	= strip_tags($_GET['id_koperasi']);
+if(isset($_POST['simpan'])){
+		$id_pemohon					= $_POST['id_pemohon']; 
+		$nama_koperasi				= $_POST['nama_koperasi'];  
+		$tempat_kedudukan			= $_POST['tempat_kedudukan']; 
+		$npwp						= $_POST['npwp']; 
+		$npwp_dikeluarkan			= $_POST['npwp_dikeluarkan'];
+		$jenis_koperasi				= $_POST['jenis_koperasi'];
+		$akta_pendirian				= $_POST['akta_pendirian']; 
+		$tgl						= $_POST['tgl']; 
+		$nomor_koperasi				= $_POST['nomor_koperasi']; 
+		$nama_dan_tempat			= $_POST['nama_dan_tempat']; 
+		$kedudukan_notaris			= $_POST['kedudukan_notaris'];  
+		$para_pendiri_koperasi		= $_POST['para_pendiri_koperasi'];
+		$koperasi_didirikan			= $_POST['koperasi_didirikan']; 
+		$maksud_tujuan				= $_POST['maksud_tujuan']; 
+		$kegiatan					= $_POST['kegiatan'];
+		$modal_simpanan_pokok		= $_POST['simpanan_pokok'];
+		$modal_simpanan_wajib		= $_POST['simpanan_wajib'];
+		$modal_simpanan_wajib_khusus= $_POST['simpanan_wajib_khusus'];		
+		$shu						= $_POST['shu']; 
+		$hutang						= $_POST['hutang']; 
+		$pr_anggota					= $_POST['pr_anggota'];  
+		$pr_anggota_tahunan			= $_POST['pr_anggota_tahunan'];
+		$pr_anggota_luarbiasa		= $_POST['pr_anggota_luarbiasa']; 
+		$cp_anggota					= $_POST['cp_anggota']; 
+		$tr_anggota					= $_POST['tr_anggota'];
+		$krp_keputusan				= $_POST['krp_keputusan'];
+		$rapat_anggota				= $_POST['rapat_anggota'];  
+		$ra_tahunan					= $_POST['ra_tahunan'];
+		$ra_luarbiasa				= $_POST['ra_luarbiasa']; 
+		$rp_anggaran_dasar			= $_POST['ra_anggaran_dasar']; 
+		$tc_pencalonan_pengurus		= $_POST['tc_pencalonan_pengurus'];
+		$sp_pengurus				= $_POST['sp_pengurus'];		
+		$jw_pengurus				= $_POST['jw_pengurus'];
+		$ja_pengurus				= $_POST['ja_pengurus']; 
+		$tc_pencalonan_pengawas		= $_POST['tc_pencalonan_pengawas']; 
+		$sp_pengawas				= $_POST['sp_pengawas'];
+		$jw_pengawas				= $_POST['jw_pengawas'];
+		$input	= $classkoperasi->ekoperasi($id_koperasi, $nama_koperasi, $tempat_kedudukan, $npwp, $npwp_dikeluarkan, $jenis_koperasi, $akta_pendirian, $tgl, $nomor_koperasi, $nama_dan_tempat, $kedudukan_notaris, $para_pendiri_koperasi, $koperasi_didirikan, $maksud_tujuan, $kegiatan, $modal_simpanan_pokok, $modal_simpanan_wajib, $modal_simpanan_wajib_khusus, $shu, $hutang, $pr_anggota, $pr_anggota_tahunan, $pr_anggota_luarbiasa, $cp_anggota, $tr_anggota, $krp_keputusan, $rapat_anggota, $ra_tahunan, $ra_luarbiasa, $rp_anggaran_dasar, $tc_pencalonan_pengurus, $sp_pengurus, $jw_pengurus, $ja_pengurus, $tc_pencalonan_pengawas, $sp_pengawas, $jw_pengawas, $id_pemohon);
+		if($input){
+			$_SESSION['alertinput']	= '<div class="alert alert-success"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>Data berhasil dirubah</div>';
+			$_SESSION['timeralert']	= time();
+			echo redirect('perizinan', 'data-koperasi');
+		}else{
+			$_SESSION['alertinput']	= '<div class="alert alert-danger"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>Terjadi Kesalahan. Mohon periksa kembali.</div>';
+			$_SESSION['timeralert']	= time();
+			echo '<script>history.back()</script>';
+		}
+}
+?>
+<div id="icons" class="bottom-border-shadow">
+	<div class="container background-white bottom-border">
+		<form method="post">
+        <h3 class="page-header">Edit Data Permohonan Koperasi</h3>         
+        <?php echo $_SESSION['alertinput']; ?>
+        <div class="col-md-6">
+        <h3 class="page-header">Data Koperasi</h3>
+        	<div class="form-group">
+                <label>Pemohon (<?php echo $classpemohon->getpemohon('nama', $classkoperasi->getkoperasi('id_pemohon', $id_koperasi)) ?>)*</label>
+                <select name="id_pemohon" class="form-control" id="select">
+                	<option value="<?php echo $classkoperasi->getkoperasi('id_pemohon', $id_koperasi) ?>">Silahkan Pilih Pemohon Baru</option>
+                	<?php echo $classpemohon->optionpemohon() ?>
+                </select>
+            </div>	   
+            <div class="form-group">
+                <label>Nama koperasi *</label>
+                <input type="text" name="nama_koperasi" class="form-control" maxlength="50" value="<?php echo $classkoperasi->getkoperasi('nama_koperasi', $id_koperasi) ?>" required="required" />
+            </div>
+            <div class="form-group">
+                <label>Tempat Kedudukan</label>
+                <input type="text" name="tempat_kedudukan" class="form-control" value="<?php echo $classkoperasi->getkoperasi('tempat_kedudukan', $id_koperasi) ?>" maxlength="25" />
+            </div>		
+            <div class="form-group">
+                <label>Nomor NPWP *</label>
+                <input type="text" name="npwp" class="form-control" maxlength="25" value="<?php echo $classkoperasi->getkoperasi('npwp', $id_koperasi) ?>" required="required" />
+            </div>	
+            <div class="form-group">
+                <label>NPWP Dikeluarkan Oleh*</label>
+                <input type="text" name="npwp_dikeluarkan" class="form-control" maxlength="50" value="<?php echo $classkoperasi->getkoperasi('npwp_dikeluarkan', $id_koperasi) ?>" required="required" />
+            </div>
+            <div class="form-group">
+                <label>Jenis Koperasi *</label>
+                <input type="text" name="jenis_koperasi" class="form-control" maxlength="25" value="<?php echo $classkoperasi->getkoperasi('jenis_koperasi', $id_koperasi) ?>" required="required" />
+            </div>
+            <div class="form-group">
+                <label>Akta Pendirian *</label>
+                <input type="text" name="akta_pendirian" class="form-control" maxlength="35" value="<?php echo $classkoperasi->getkoperasi('akta_pendirian', $id_koperasi) ?>" />
+            </div>
+            <div class="form-group">
+                <label>Tanggal Pendirian*</label>
+                <input type="date" name="tgl" class="form-control" value="<?php echo formatTanggal($classkoperasi->getkoperasi('tgl', $id_koperasi)) ?>" />
+            </div>
+            <div class="form-group">
+                <label>Nomor Koperasi *</label>
+                <input type="text" name="nomor_koperasi" class="form-control" maxlength="35" value="<?php echo $classkoperasi->getkoperasi('nomor_koperasi', $id_koperasi) ?>" required="required" />
+            </div>
+            <div class="form-group">
+                <label>Nama dan Tempat Koperasi *</label>
+                <input type="text" name="nama_dan_tempat" class="form-control" maxlength="100" value="<?php echo $classkoperasi->getkoperasi('nama_dan_tempat', $id_koperasi) ?>" required="required" />
+            </div>
+            <div class="form-group">
+                <label>Kedudukan Notaris *</label>
+                <input type="text" name="kedudukan_notaris" class="form-control" maxlength="30" value="<?php echo $classkoperasi->getkoperasi('kedudukan_notaris', $id_koperasi) ?>" required="required" />
+            </div>
+            <div class="form-group">
+                <label>Para Pendiri Koperasi *</label>
+                <input type="text" name="para_pendiri_koperasi" class="form-control" maxlength="35" value="<?php echo $classkoperasi->getkoperasi('para_pendiri_koperasi', $id_koperasi) ?>" required="required" />
+            </div>
+            <div class="form-group">
+                <label>Koperasi Didirikan *</label>
+                <input type="text" name="koperasi_didirikan" class="form-control" maxlength="100" value="<?php echo $classkoperasi->getkoperasi('koperasi_didirikan', $id_koperasi) ?>" required="required" />
+            </div>
+            <div class="form-group">
+                <label>Maksud dan Tujuan Koperasi *</label>
+                <input type="text" name="maksud_tujuan" class="form-control" maxlength="150" value="<?php echo $classkoperasi->getkoperasi('maksud_tujuan', $id_koperasi) ?>" required="required" />
+            </div>
+            <div class="form-group">
+                <label>Kegiatan Usaha Koperasi *</label>
+                <input type="text" name="kegiatan" value="<?php echo $classkoperasi->getkoperasi('kegiatan', $id_koperasi) ?>" class="form-control" maxlength="150" required="required" />
+            </div>
+            <h3 class="page-header">Pemanggilan Rapat</h3>
+       		<div class="form-group">
+                <label>Jangka Waktu Pemanggilan Rapat Anggota </label>
+                <input type="text" name="pr_anggota" class="form-control" maxlength="2" value="<?php echo $classkoperasi->getkoperasi('pr_anggota', $id_koperasi) ?>" placeholder="selisih hari sebelum rapat" />
+            </div>
+            <div class="form-group">
+                <label>Jangka Waktu Pemanggilan Rapat Anggota Tahunan</label>
+                <input type="text" name="pr_anggota_tahunan" class="form-control" maxlength="2" value="<?php echo $classkoperasi->getkoperasi('pr_anggota_tahunan', $id_koperasi) ?>" placeholder="selisih hari sebelum rapat tahunan" />
+            </div>
+            <div class="form-group">
+                <label>Jangka Waktu Pemanggilan Rapat Anggota Luar Biasa</label>
+                <input type="text" name="pr_anggota_luarbiasa" class="form-control" maxlength="2" value="<?php echo $classkoperasi->getkoperasi('pr_anggota_luarbiasa', $id_koperasi) ?>" placeholder="selisih hari sebelum rapat luar biasa" />
+            </div>
+            <div class="form-group">
+                <label>Cara Pemanggilan Rapat</label>
+                <input type="text" name="cp_anggota" value="<?php echo $classkoperasi->getkoperasi('cp_anggota', $id_koperasi) ?>" class="form-control" maxlength="25" />
+            </div>
+            <div class="form-group">
+                <label>Tempat Rapat Anggota</label>
+                <input type="text" name="tr_anggota" class="form-control" maxlength="25" value="<?php echo $classkoperasi->getkoperasi('tr_anggota', $id_koperasi) ?>" />
+            </div>
+            <div class="form-group">
+                <label>Korum Rapat dan Persyaratan sah Keputusan</label>
+                <input type="text" name="krp_keputusan" class="form-control" maxlength="50" value="<?php echo $classkoperasi->getkoperasi('krp_keputusan', $id_koperasi) ?>" />
+            </div>
+            <div class="form-group">
+                <label>Rapat Anggota</label>
+                <input type="text" name="rapat_anggota" class="form-control" maxlength="50" value="<?php echo $classkoperasi->getkoperasi('rapat_anggota', $id_koperasi) ?>" />
+            </div>
+            <div class="form-group">
+                <label>Rapat Tahunan</label>
+                <input type="text" name="ra_tahunan" class="form-control" maxlength="100" value="<?php echo $classkoperasi->getkoperasi('ra_tahunan', $id_koperasi) ?>" />
+            </div>
+            <div class="form-group">
+                <label>Rapat Luar Biasa</label>
+                <input type="text" name="ra_luarbiasa" class="form-control" maxlength="100" value="<?php echo $classkoperasi->getkoperasi('ra_luarbiasa', $id_koperasi) ?>" />
+            </div>
+            <div class="form-group">
+                <label>Rapat Anggaran Dasar</label>
+                <input type="text" name="ra_anggaran_dasar" class="form-control" maxlength="100" value="<?php echo $classkoperasi->getkoperasi('rp_anggaran_dasar', $id_koperasi) ?>" />
+            </div>
+            </div>
+            
+            <div class="col-md-6">
+            <h3 class="page-header">Modal Pokok</h3>	
+            <div class="form-group">
+                <label>Simpanan Pokok (Rp)*</label>
+                <input type="text" name="simpanan_pokok" class="form-control" maxlength="11" value="<?php echo $classkoperasi->getkoperasi('modal_simpanan_pokok', $id_koperasi) ?>" required="required" />
+            </div>
+            <div class="form-group">
+                <label>Simpanan Wajib (Rp)*</label>
+                <input type="text" name="simpanan_wajib" class="form-control" maxlength="11" value="<?php echo $classkoperasi->getkoperasi('modal_simpanan_wajib', $id_koperasi) ?>" required="required" />
+            </div>
+            <div class="form-group">
+                <label>Simpanan Wajib Khusus (Rp)*</label>
+                <input type="text" name="simpanan_wajib_khusus" class="form-control" maxlength="11" value="<?php echo $classkoperasi->getkoperasi('modal_simpanan_wajib_khusus', $id_koperasi) ?>" />
+            </div>
+            <div class="form-group">
+                <label>SHU (Rp)</label>
+                <input type="text" name="shu" class="form-control" maxlength="50" value="<?php echo $classkoperasi->getkoperasi('shu', $id_koperasi) ?>" />
+            </div>
+            <div class="form-group">
+                <label>Hutang (Rp)</label>
+                <input type="text" name="hutang" class="form-control" maxlength="11" value="<?php echo $classkoperasi->getkoperasi('hutang', $id_koperasi) ?>" />
+            </div>
+            </div>   
+            
+            <div class="col-md-6">
+            <h3 class="page-header">Pencalonan Pengurus dan Pengawas</h3>
+            <p><strong>Pencalonan >> Pengurus</strong></p>
+       		<div class="form-group">
+                <label>Tata Cara Pencalonan </label>
+                <input type="text" name="tc_pencalonan_pengurus" class="form-control" maxlength="50" value="<?php echo $classkoperasi->getkoperasi('tc_pencalonan_pengurus', $id_koperasi) ?>"/>
+            </div>
+            <div class="form-group">
+                <label>Syarat Pengangkatan</label>
+                <input type="text" name="sp_pengurus" class="form-control" maxlength="100" value="<?php echo $classkoperasi->getkoperasi('sp_pengurus', $id_koperasi) ?>" />
+            </div>
+            <div class="form-group">
+                <label>Jangka Waktu</label>
+                <input type="text" name="ja_pengurus" class="form-control" maxlength="2" value="<?php echo $classkoperasi->getkoperasi('ja_pengurus', $id_koperasi) ?>" placeholder="jangka waktu kepengurusan" />
+            </div>
+            <div class="form-group">
+                <label>Jumlah Anggota Pengurus</label>
+                <input type="text" name="ja_pengurus" class="form-control" maxlength="5" value="<?php echo $classkoperasi->getkoperasi('ja_pengurus', $id_koperasi) ?>" />
+            </div>
+             <p><strong>Pencalonan >> Pengawas</strong></p>
+       		<div class="form-group">
+                <label>Tata Cara Pencalonan </label>
+                <input type="text" name="tc_pencalonan_pengawas" class="form-control" maxlength="50" value="<?php echo $classkoperasi->getkoperasi('tc_pencalonan_pengawas', $id_koperasi) ?>"/>
+            </div>
+            <div class="form-group">
+                <label>Syarat Pengangkatan</label>
+                <input type="text" name="sp_pengawas" class="form-control" maxlength="100" value="<?php echo $classkoperasi->getkoperasi('sp_pengawas', $id_koperasi) ?>" />
+            </div>
+            <div class="form-group">
+                <label>Jangka Waktu</label>
+                <input type="text" name="ja_pengawas" class="form-control" maxlength="2" value="<?php echo $classkoperasi->getkoperasi('jw_pengawas', $id_koperasi) ?>" placeholder="jangka waktu pengawas" />
+            </div>
+            </div>
+        <div class="row"></div>        
+            
+            <div class="row"></div>
+		<a href="index.php?modul=perizinan&&file=data-koperasi" class="btn btn-default">Kembali</a> | <input type="submit" name="simpan" value="Simpan" class="btn btn-primary">
+		</form>
+		<br /><br /><br /><br />
+	</div>
+</div>
+
+<?php }?>
